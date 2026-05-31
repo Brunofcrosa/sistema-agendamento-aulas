@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: "Barlow", Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #3f4254;
+}
+
+.container {
+    flex: 1;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+}
+
+.page-center {
+    flex: 1;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+}
+
+.box {
+    background: #ffffff;
+    width: 360px;
+    border-radius: 4px;
+    box-shadow: 0 4px 18px rgba(0, 51, 102, 0.12);
+    border-top: 4px solid #003366;
+    padding: 34px 32px 30px;
+}
+
+.box h2 {
+    color: #032947;
+    margin: 0 0 28px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    margin: 0 0 16px;
+    border: 1px solid #e2e5ec;
+    border-radius: 4px;
+    font-size: 15px;
+    outline: none;
+    background: #ffffff;
+}
+
+input:focus {
+    border-color: #3699ff;
+    box-shadow: 0 0 0 3px rgba(54, 153, 255, 0.12);
+}
+
+button {
+    width: 100%;
+    min-height: 42px;
+    background: #003366;
+    color: #ffffff;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+button:hover {
+    background: #032947;
+}
+
+a {
+    display: block;
+    margin-top: 16px;
+    color: #003366;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.erro {
+    color: #f64e60;
+    background: #ffe2e5;
+    border-radius: 4px;
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+}

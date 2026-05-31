@@ -1,0 +1,91 @@
+.bg-navy-custom {
+    background-color: #f8f8f8;
+}
+
+.sidebar-container {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 265px;
+    height: calc(100vh - 60px);
+    box-shadow: 8px 0 22px rgba(0, 51, 102, 0.08);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.sidebar-menu-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-top: 22px;
+}
+
+.menu-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-section {
+    padding: 20px 20px 10px;
+}
+
+.menu-section-text {
+    color: #0052ff;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.menu-link:hover {
+    background-color: #eef5ff;
+}
+
+.menu-link-icon {
+    color: #003366;
+    font-size: 16px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.menu-link-text {
+    color: #2d3436;
+    font-weight: 500;
+    white-space: nowrap;
+    margin-left: 12px;
+    flex-grow: 1;
+}
+
+.menu-item-active > .menu-link {
+    background-color: #eaf2ff;
+    border-left: 3px solid #2d7dff;
+}
+
+.menu-item-active > .menu-link .menu-link-icon {
+    color: #003366;
+}
+
+.menu-item-active > .menu-link .menu-link-text,
+.menu-item:hover .menu-link-text {
+    color: #2d3436;
+}
+
+@media (max-width: 950px) {
+    .sidebar-container {
+        position: static;
+        width: 100%;
+    }
+}
