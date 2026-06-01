@@ -2,19 +2,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar.css">
+<nav class="navbar navbar-light bg-light shadow-sm sticky-top px-4" style="height: 60px;">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
 
-<nav class="navbar-custom ${empty sessionScope.usuario || navbarFull ? 'navbar-full' : ''}">
-  <div class="navbar-custom__left"></div>
+    <div class="navbar-brand mx-auto">
+      <img src="${pageContext.request.contextPath}/imgs/logo.png" alt="Agendamento" style="height: 40px; object-fit: contain;">
+    </div>
 
-  <div class="navbar-custom__center">
-    <img class="navbar-title-logo" src="${pageContext.request.contextPath}/imgs/logo.png" alt="Agendamento de Salas de Aula">
-  </div>
-
-  <div class="navbar-custom__right">
-    <c:if test="${not empty sessionScope.usuario && !navbarFull}">
-      <a href="logout" class="btn-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
-    </c:if>
+    <div class="d-flex">
+      <c:if test="${not empty sessionScope.usuario && !navbarFull}">
+        <a href="logout" class="btn btn-outline-secondary btn-sm fw-bold d-flex align-items-center gap-2">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
+        </a>
+      </c:if>
+    </div>
   </div>
 </nav>
-

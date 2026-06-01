@@ -2,54 +2,38 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<aside class="bg-light border-end shadow-sm d-flex flex-column" style="width: 265px; min-height: calc(100vh - 60px);">
+  <div class="p-3 mt-3">
+    <ul class="nav flex-column">
 
-<aside class="sidebar-container bg-navy-custom">
-  <nav class="sidebar-menu-wrapper">
-    <ul class="menu-nav">
-      <li class="menu-section">
-        <h4 class="menu-section-text">Principal</h4>
+      <li class="nav-item mb-2">
+        <small class="text-primary fw-bold text-uppercase px-3">Principal</small>
       </li>
-      <li class="menu-item ${pageName == 'home' ? 'menu-item-active' : ''}">
-        <a class="menu-link" href="home">
-          <i class="menu-link-icon fa-solid fa-house"></i>
-          <span class="menu-link-text">Página Inicial</span>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold ${pageName == 'home' ? 'active bg-primary bg-opacity-10 text-primary border-start border-primary border-3' : 'text-dark'}" href="home">
+          <i class="fa-solid fa-house me-2"></i> Página Inicial
         </a>
       </li>
 
-      <li class="menu-section">
-        <h4 class="menu-section-text">Gerenciamento</h4>
+      <li class="nav-item mt-4 mb-2">
+        <small class="text-primary fw-bold text-uppercase px-3">Gerenciamento</small>
       </li>
-      <li class="menu-item ${pageName == 'salas' && tela != 'encontrar' ? 'menu-item-active' : ''}">
-        <a class="menu-link" href="sala">
-          <i class="menu-link-icon fa-solid fa-door-open"></i>
-          <span class="menu-link-text">Salas</span>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold ${pageName == 'salas' ? 'active bg-primary bg-opacity-10 text-primary border-start border-primary border-3' : 'text-dark'}" href="sala">
+          <i class="fa-solid fa-door-open me-2"></i> Salas
         </a>
       </li>
-      <li class="menu-item ${pageName == 'reservas' ? 'menu-item-active' : ''}">
-        <a class="menu-link" href="reserva">
-          <i class="menu-link-icon fa-solid fa-calendar-check"></i>
-          <span class="menu-link-text">Agendamento de Salas</span>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold ${pageName == 'reservas' ? 'active bg-primary bg-opacity-10 text-primary border-start border-primary border-3' : 'text-dark'}" href="reserva">
+          <i class="fa-solid fa-calendar-check me-2"></i> Agendamentos
         </a>
       </li>
-      <li class="menu-item ${pageName == 'docentes' ? 'menu-item-active' : ''}">
-        <a class="menu-link" href="docente">
-          <i class="menu-link-icon fa-solid fa-chalkboard-user"></i>
-          <span class="menu-link-text">Gerenciar Docentes</span>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold ${pageName == 'docentes' ? 'active bg-primary bg-opacity-10 text-primary border-start border-primary border-3' : 'text-dark'}" href="docente">
+          <i class="fa-solid fa-chalkboard-user me-2"></i> Docentes
         </a>
       </li>
 
-      <%--
-      <li class="menu-section">
-        <h4 class="menu-section-text">Ferramentas</h4>
-      </li>
-      <li class="menu-item ${pageName == 'salas' && tela == 'encontrar' ? 'menu-item-active' : ''}">
-        <a class="menu-link" href="sala?tela=encontrar">
-          <i class="menu-link-icon fa-solid fa-magnifying-glass"></i>
-          <span class="menu-link-text">Encontrar Salas</span>
-        </a>
-      </li>
-      --%>
     </ul>
-  </nav>
+  </div>
 </aside>

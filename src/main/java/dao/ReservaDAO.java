@@ -130,7 +130,7 @@ public class ReservaDAO {
     }
 
     public void cancelar(int id) {
-        String sql = "UPDATE reserva SET status = 'CANCELADA' WHERE id = ?";
+        String sql = "DELETE FROM reserva WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

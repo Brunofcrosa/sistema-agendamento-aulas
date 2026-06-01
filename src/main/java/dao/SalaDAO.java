@@ -126,6 +126,9 @@ public class SalaDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            if ("23503".equals(e.getSQLState())) {
+                throw new IllegalArgumentException("Não é possível excluir esta sala pois ela possui reservas ativas vinculadas.");
+            }
             throw new RuntimeException("Erro ao excluir sala", e);
         }
     }

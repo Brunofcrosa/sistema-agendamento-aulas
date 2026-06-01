@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConexaoDB {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/sistema-agendamento-salas";
+    private static final String URL = "jdbc:postgresql://localhost:5434/sistema-agendamento-salas";
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
 

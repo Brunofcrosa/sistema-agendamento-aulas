@@ -1,13 +1,4 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-
-<div class="footer">
-  <div class="links">
-    <a href="home">Painel</a>
-    <a href="docente">Docentes</a>
-    <a href="sala">Salas</a>
-    <a href="reserva">Reservas</a>
-  </div>
-
-  <p>© 2026 - Bruno Fetzer</p>
-</div>
-
+<footer class="bg-light border-top py-3 mt-auto w-100 text-center">
+  <p class="text-muted small mb-0">Bruno Fetzer</p>
+</footer>

@@ -102,6 +102,9 @@ public class DocenteDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            if ("23503".equals(e.getSQLState())) {
+                throw new IllegalArgumentException("Não é possível excluir este docente pois ele possui reservas vinculadas.");
+            }
             throw new RuntimeException("Erro ao excluir docente", e);
         }
     }
