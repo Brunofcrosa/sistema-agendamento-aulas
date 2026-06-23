@@ -2,7 +2,9 @@ package org.agendamento.sistemaagendamentoaulas.service;
 
 import org.agendamento.sistemaagendamentoaulas.dao.UsuarioDAO;
 import org.agendamento.sistemaagendamentoaulas.model.Usuario;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoginService {
 
     public Usuario autenticar(String email, String senha) {

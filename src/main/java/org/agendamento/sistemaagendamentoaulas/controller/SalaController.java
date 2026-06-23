@@ -26,7 +26,12 @@ import java.util.List;
 @RequestMapping("/sala")
 public class SalaController {
 
-    private final SalaService service = new SalaService();
+    private final SalaService service;
+
+    public SalaController(SalaService service) {
+        this.service = service;
+    }
+
 
     @GetMapping
     public String listar(@RequestParam(required = false) String acao,
@@ -36,11 +41,13 @@ public class SalaController {
                          @RequestParam(required = false) String diaSemana,
                          @RequestParam(required = false) String horaInicio,
                          @RequestParam(required = false) String horaFim,
+                         @RequestParam(required = false) Integer capacidade,
+                         @RequestParam(required = false) Boolean possuiProjetor,
                          HttpSession session,
                          Model model,
                          RedirectAttributes redirectAttrs) {
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         try {
@@ -82,10 +89,12 @@ public class SalaController {
         List<Sala> lista = service.listar();
 
         if ("encontrar".equals(tela)) {
-            lista = filtrarDisponiveis(lista, diaSemana, horaInicio, horaFim);
+            List<Sala> sugeridas = filtrarDisponiveis(lista, diaSemana, horaInicio, horaFim, capacidade, possuiProjetor);
+            model.addAttribute("salasSugeridas", sugeridas);
+        } else {
+            model.addAttribute("salas", lista);
         }
 
-        model.addAttribute("salas", lista);
         model.addAttribute("tela", tela);
         return "salas";
     }
@@ -101,7 +110,7 @@ public class SalaController {
                          Model model,
                          RedirectAttributes redirectAttrs) {
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         try {
@@ -125,9 +134,9 @@ public class SalaController {
         }
     }
 
-    private List<Sala> filtrarDisponiveis(List<Sala> salas, String diaSemana, String horaInicio, String horaFim) {
+    private List<Sala> filtrarDisponiveis(List<Sala> salas, String diaSemana, String horaInicio, String horaFim, Integer capacidade, Boolean possuiProjetor) {
         if (diaSemana == null || diaSemana.isEmpty() || horaInicio == null || horaInicio.isEmpty() || horaFim == null || horaFim.isEmpty()) {
-            return salas;
+            return new ArrayList<>();
         }
 
         Date dataReserva = calcularProximaData(diaSemana);
@@ -137,6 +146,15 @@ public class SalaController {
         List<Sala> filtrada = new ArrayList<>();
 
         for (Sala sala : salas) {
+            if (!sala.isAtiva()) {
+                continue;
+            }
+            if (capacidade != null && sala.getCapacidade() < capacidade) {
+                continue;
+            }
+            if (possuiProjetor != null && possuiProjetor && (sala.getRecursos() == null || !sala.getRecursos().contains("Projetor"))) {
+                continue;
+            }
             if (reservaDAO.isSalaDisponivel(sala.getId(), dataReserva, inicio, fim, 0)) {
                 filtrada.add(sala);
             }

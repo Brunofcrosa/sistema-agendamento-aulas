@@ -9,44 +9,43 @@
     <link rel="icon" href="${pageContext.request.contextPath}/imgs/favicon.ico">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css">
-    <title>Cadastro</title>
+    <title>Login</title>
 </head>
 <body>
     <c:set var="navbarFull" value="true" scope="request" />
     <jsp:include page="/WEB-INF/pages/includes/navbar.jsp" />
     
-    <div class="page-center">
+    <div class="container">
         <div class="box">
-            <h2>Criar Conta</h2>
-            <form action="usuario" method="post">
+            <h2>Login</h2>
+            <form action="login" method="post">
                 <input type="hidden" name="csrfToken" value="${csrfToken}">
                 
                 <div class="input-group">
-                    <label for="nome">Nome</label>
-                    <input type="text" id="nome" name="nome" placeholder="Ex: Maria Silva" required>
-                </div>
-                
-                <div class="input-group">
                     <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="Ex: maria@email.com" required>
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
                 </div>
                 
                 <div class="input-group">
                     <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
                 </div>
                 
-                <button type="submit">Cadastrar</button>
+                <button type="submit">Entrar</button>
             </form>
             
-            <a class="back-link" href="${pageContext.request.contextPath}/login">Voltar ao Login</a>
+            <a href="cadastro">Criar conta</a>
+            
+            <c:if test="${msg == 'cadastrado'}">
+                <p class="msg">Conta criada com sucesso!</p>
+            </c:if>
             
             <c:if test="${not empty erro}">
                 <p class="erro"><c:out value="${erro}" /></p>
             </c:if>
         </div>
     </div>
-    
+
     <jsp:include page="/WEB-INF/pages/includes/footer.jsp" />
 </body>
 </html>

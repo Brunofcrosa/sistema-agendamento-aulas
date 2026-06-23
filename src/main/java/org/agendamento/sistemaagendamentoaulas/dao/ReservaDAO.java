@@ -1,11 +1,18 @@
 package org.agendamento.sistemaagendamentoaulas.dao;
 
 import org.agendamento.sistemaagendamentoaulas.model.Reserva;
+import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ReservaDAO {
 
     private Reserva map(ResultSet rs) throws SQLException {
@@ -24,7 +31,8 @@ public class ReservaDAO {
     }
 
     public boolean inserir(Reserva reserva) {
-        String sql = "INSERT INTO reserva (sala_id, docente_id, data_reserva, hora_inicio, hora_fim, finalidade, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reserva (sala_id, docente_id, data_reserva, hora_inicio, hora_fim, finalidade, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -45,7 +53,13 @@ public class ReservaDAO {
     }
 
     public List<Reserva> listar() {
-        String sql = "SELECT r.*, s.nome AS sala_nome, d.nome AS docente_nome FROM reserva r INNER JOIN sala s ON s.id = r.sala_id INNER JOIN docente d ON d.id = r.docente_id WHERE r.status = 'ATIVA' ORDER BY r.data_reserva, r.hora_inicio";
+        String sql = "SELECT r.*, s.nome AS sala_nome, d.nome AS docente_nome "
+                + "FROM reserva r "
+                + "INNER JOIN sala s ON s.id = r.sala_id "
+                + "INNER JOIN docente d ON d.id = r.docente_id "
+                + "WHERE r.status = 'ATIVA' "
+                + "ORDER BY r.data_reserva, r.hora_inicio";
+
         List<Reserva> lista = new ArrayList<>();
 
         try (Connection conn = ConexaoDB.getConexao();
@@ -64,27 +78,39 @@ public class ReservaDAO {
     }
 
     public Reserva buscarPorId(int id) {
-        String sql = "SELECT r.*, s.nome AS sala_nome, d.nome AS docente_nome FROM reserva r INNER JOIN sala s ON s.id = r.sala_id INNER JOIN docente d ON d.id = r.docente_id WHERE r.id = ?";
+        String sql = "SELECT r.*, s.nome AS sala_nome, d.nome AS docente_nome "
+                + "FROM reserva r "
+                + "INNER JOIN sala s ON s.id = r.sala_id "
+                + "INNER JOIN docente d ON d.id = r.docente_id "
+                + "WHERE r.id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return map(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar reserva", e);
+            throw new RuntimeException("Erro ao buscar reserva por ID", e);
         }
 
         return null;
     }
 
     public boolean isSalaDisponivel(int salaId, Date dataReserva, Time horaInicio, Time horaFim, int reservaIgnoradaId) {
-        String sql = "SELECT COUNT(*) FROM reserva WHERE sala_id = ? AND data_reserva = ? AND status = 'ATIVA' AND id <> ? AND hora_inicio < ? AND hora_fim > ?";
+        String sql = "SELECT COUNT(*) "
+                + "FROM reserva "
+                + "WHERE sala_id = ? "
+                + "AND data_reserva = ? "
+                + "AND status = 'ATIVA' "
+                + "AND id <> ? "
+                + "AND hora_inicio < ? "
+                + "AND hora_fim > ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -95,9 +121,10 @@ public class ReservaDAO {
             stmt.setTime(4, horaFim);
             stmt.setTime(5, horaInicio);
 
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) == 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) == 0;
+                }
             }
 
         } catch (SQLException e) {
@@ -107,8 +134,10 @@ public class ReservaDAO {
         return false;
     }
 
-    public void atualizar(Reserva reserva) {
-        String sql = "UPDATE reserva SET sala_id=?, docente_id=?, data_reserva=?, hora_inicio=?, hora_fim=?, finalidade=?, status=? WHERE id=?";
+    public boolean atualizar(Reserva reserva) {
+        String sql = "UPDATE reserva "
+                + "SET sala_id = ?, docente_id = ?, data_reserva = ?, hora_inicio = ?, hora_fim = ?, finalidade = ?, status = ? "
+                + "WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -122,21 +151,22 @@ public class ReservaDAO {
             stmt.setString(7, reserva.getStatus());
             stmt.setInt(8, reserva.getId());
 
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar reserva", e);
         }
     }
 
-    public void cancelar(int id) {
+    public boolean cancelar(int id) {
         String sql = "UPDATE reserva SET status = 'CANCELADA' WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            stmt.executeUpdate();
+
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao cancelar reserva", e);

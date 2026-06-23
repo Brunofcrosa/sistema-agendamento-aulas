@@ -17,7 +17,11 @@ import java.util.List;
 @RequestMapping("/docente")
 public class DocenteController {
 
-    private final DocenteService service = new DocenteService();
+    private final DocenteService service;
+
+    public DocenteController(DocenteService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public String listar(@RequestParam(required = false) String acao,
@@ -26,8 +30,9 @@ public class DocenteController {
                          HttpSession session,
                          Model model,
                          RedirectAttributes redirectAttrs) {
+
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         try {
@@ -63,8 +68,9 @@ public class DocenteController {
                          HttpSession session,
                          Model model,
                          RedirectAttributes redirectAttrs) {
+
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         Docente docente = new Docente(matricula, nome);

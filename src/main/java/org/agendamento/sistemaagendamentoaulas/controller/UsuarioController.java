@@ -13,7 +13,10 @@ import org.agendamento.sistemaagendamentoaulas.service.UsuarioService;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final UsuarioService service = new UsuarioService();
+    private final UsuarioService service;
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
 
     @PostMapping
     public String cadastrar(@RequestParam String nome,
@@ -28,7 +31,7 @@ public class UsuarioController {
 
             if (sucesso) {
                 redirectAttrs.addFlashAttribute("msg", "cadastrado");
-                return "redirect:/index.jsp";
+                return "redirect:/login";
             }
 
             model.addAttribute("erro", "Erro ao cadastrar usuario");

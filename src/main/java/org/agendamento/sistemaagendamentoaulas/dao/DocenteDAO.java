@@ -1,11 +1,16 @@
 package org.agendamento.sistemaagendamentoaulas.dao;
 
 import org.agendamento.sistemaagendamentoaulas.model.Docente;
+import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class DocenteDAO {
 
     private Docente map(ResultSet rs) throws SQLException {
@@ -62,21 +67,22 @@ public class DocenteDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return map(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar docente", e);
+            throw new RuntimeException("Erro ao buscar docente por ID", e);
         }
 
         return null;
     }
 
-    public void atualizar(Docente docente) {
-        String sql = "UPDATE docente SET matricula=?, nome=? WHERE id=?";
+    public boolean atualizar(Docente docente) {
+        String sql = "UPDATE docente SET matricula = ?, nome = ? WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -85,21 +91,22 @@ public class DocenteDAO {
             stmt.setString(2, docente.getNome());
             stmt.setInt(3, docente.getId());
 
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar docente", e);
         }
     }
 
-    public void excluir(int id) {
+    public boolean excluir(int id) {
         String sql = "DELETE FROM docente WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            stmt.executeUpdate();
+
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao excluir docente", e);

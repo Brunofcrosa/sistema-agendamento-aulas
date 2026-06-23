@@ -13,14 +13,22 @@ import org.agendamento.sistemaagendamentoaulas.service.SalaService;
 @RequestMapping("/home")
 public class HomeController {
 
-    private final DocenteService docenteService = new DocenteService();
-    private final SalaService salaService = new SalaService();
-    private final ReservaService reservaService = new ReservaService();
+    private final DocenteService docenteService;
+    private final SalaService salaService;
+    private final ReservaService reservaService;
+
+    public HomeController(DocenteService docenteService,
+                          SalaService salaService,
+                          ReservaService reservaService) {
+        this.docenteService = docenteService;
+        this.salaService = salaService;
+        this.reservaService = reservaService;
+    }
 
     @GetMapping
     public String home(HttpSession session, Model model) {
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         model.addAttribute("totalDocentes", docenteService.listar().size());

@@ -1,16 +1,27 @@
 package org.agendamento.sistemaagendamentoaulas.dao;
 
 import org.agendamento.sistemaagendamentoaulas.model.Usuario;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Repository
 public class UsuarioDAO {
 
-    public Usuario autenticar(String email, String senha) {
+    private Usuario map(ResultSet rs) throws SQLException {
+        Usuario usuario = new Usuario();
+        usuario.setId(rs.getInt("id"));
+        usuario.setNome(rs.getString("nome"));
+        usuario.setEmail(rs.getString("email"));
+        usuario.setSenha(rs.getString("senha"));
+        usuario.setAtivo(rs.getBoolean("ativo"));
+        return usuario;
+    }
 
+    public Usuario autenticar(String email, String senha) {
         String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ? AND ativo = true";
 
         try (Connection conn = ConexaoDB.getConexao();
@@ -19,28 +30,20 @@ public class UsuarioDAO {
             stmt.setString(1, email);
             stmt.setString(2, senha);
 
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setId(rs.getInt("id"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
-                usuario.setAtivo(rs.getBoolean("ativo"));
-
-                return usuario;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao autenticar usuÃ¡rio", e);
+            throw new RuntimeException("Erro ao autenticar usuário", e);
         }
 
         return null;
     }
 
     public boolean inserir(Usuario usuario) {
-
         String sql = "INSERT INTO usuario (nome, email, senha, ativo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexaoDB.getConexao();
@@ -54,7 +57,7 @@ public class UsuarioDAO {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir usuÃ¡rio", e);
+            throw new RuntimeException("Erro ao inserir usuário", e);
         }
     }
 }

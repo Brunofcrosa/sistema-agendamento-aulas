@@ -2,9 +2,11 @@ package org.agendamento.sistemaagendamentoaulas.service;
 
 import org.agendamento.sistemaagendamentoaulas.dao.DocenteDAO;
 import org.agendamento.sistemaagendamentoaulas.model.Docente;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DocenteService {
 
     public List<Docente> listar() {

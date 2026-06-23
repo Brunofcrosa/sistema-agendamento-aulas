@@ -1,11 +1,16 @@
 package org.agendamento.sistemaagendamentoaulas.dao;
 
 import org.agendamento.sistemaagendamentoaulas.model.Sala;
+import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class SalaDAO {
 
     private Sala map(ResultSet rs) throws SQLException {
@@ -83,21 +88,22 @@ public class SalaDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return map(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar sala", e);
+            throw new RuntimeException("Erro ao buscar sala por ID", e);
         }
 
         return null;
     }
 
-    public void atualizar(Sala sala) {
-        String sql = "UPDATE sala SET nome=?, bloco=?, capacidade=?, recursos=?, ativa=? WHERE id=?";
+    public boolean atualizar(Sala sala) {
+        String sql = "UPDATE sala SET nome = ?, bloco = ?, capacidade = ?, recursos = ?, ativa = ? WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -109,21 +115,22 @@ public class SalaDAO {
             stmt.setBoolean(5, sala.isAtiva());
             stmt.setInt(6, sala.getId());
 
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar sala", e);
         }
     }
 
-    public void excluir(int id) {
+    public boolean excluir(int id) {
         String sql = "DELETE FROM sala WHERE id = ?";
 
         try (Connection conn = ConexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            stmt.executeUpdate();
+
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao excluir sala", e);

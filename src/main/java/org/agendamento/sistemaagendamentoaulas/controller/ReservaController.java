@@ -21,9 +21,15 @@ import java.util.List;
 @RequestMapping("/reserva")
 public class ReservaController {
 
-    private final ReservaService service = new ReservaService();
-    private final SalaService salaService = new SalaService();
-    private final DocenteService docenteService = new DocenteService();
+    private final ReservaService service;
+    private final SalaService salaService;
+    private final DocenteService docenteService;
+
+    public ReservaController(ReservaService service, SalaService salaService, DocenteService docenteService) {
+        this.service = service;
+        this.salaService = salaService;
+        this.docenteService = docenteService;
+    }
 
     @GetMapping
     public String listar(@RequestParam(required = false) String acao,
@@ -36,7 +42,7 @@ public class ReservaController {
                          Model model,
                          RedirectAttributes redirectAttrs) {
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         try {
@@ -83,7 +89,7 @@ public class ReservaController {
                          Model model,
                          RedirectAttributes redirectAttrs) {
         if (session.getAttribute("usuario") == null) {
-            return "redirect:/index.jsp";
+            return "redirect:/login";
         }
 
         try {
