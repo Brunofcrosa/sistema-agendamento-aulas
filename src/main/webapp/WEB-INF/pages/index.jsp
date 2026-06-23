@@ -37,11 +37,29 @@
             <a href="cadastro">Criar conta</a>
             
             <c:if test="${msg == 'cadastrado'}">
-                <p class="msg">Conta criada com sucesso!</p>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Conta criada com sucesso!',
+                            icon: 'success',
+                            confirmButtonColor: '#007bff'
+                        });
+                    });
+                </script>
             </c:if>
             
             <c:if test="${not empty erro}">
-                <p class="erro"><c:out value="${erro}" /></p>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: '<c:out value="${erro}" />',
+                            icon: 'error',
+                            confirmButtonColor: '#007bff'
+                        });
+                    });
+                </script>
             </c:if>
         </div>
     </div>

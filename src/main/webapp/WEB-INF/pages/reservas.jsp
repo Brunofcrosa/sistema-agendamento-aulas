@@ -22,15 +22,38 @@
         
         <main class="main-content">
             <c:if test="${not empty erro}">
-                <div class="msg erro"><c:out value="${erro}" /></div>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: '<c:out value="${erro}" />',
+                            icon: 'error',
+                            confirmButtonColor: '#007bff'
+                        });
+                    });
+                </script>
             </c:if>
-            
-            <c:choose>
-                <c:when test="${msg == 'salva'}"><div class="msg">Reserva cadastrada!</div></c:when>
-                <c:when test="${msg == 'editada'}"><div class="msg">Reserva atualizada!</div></c:when>
-                <c:when test="${msg == 'cancelada'}"><div class="msg">Reserva cancelada!</div></c:when>
-                <c:when test="${msg == 'sucesso'}"><div class="msg">Agendado com sucesso!</div></c:when>
-            </c:choose>
+            <c:if test="${not empty msg}">
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        let text = '';
+                        <c:choose>
+                            <c:when test="${msg == 'salva'}">text = 'Reserva cadastrada com sucesso!';</c:when>
+                            <c:when test="${msg == 'editada'}">text = 'Reserva atualizada com sucesso!';</c:when>
+                            <c:when test="${msg == 'cancelada'}">text = 'Reserva cancelada com sucesso!';</c:when>
+                            <c:when test="${msg == 'sucesso'}">text = 'Agendamento realizado com sucesso!';</c:when>
+                        </c:choose>
+                        if (text) {
+                            Swal.fire({
+                                title: 'Sucesso!',
+                                text: text,
+                                icon: 'success',
+                                confirmButtonColor: '#007bff'
+                            });
+                        }
+                    });
+                </script>
+            </c:if>
 
             <c:if test="${tela == 'novo'}">
             <section class="content-card">
@@ -118,7 +141,7 @@
                             <td><c:out value="${r.horaFim}" /></td>
                             <td class="actions">
                                 <a href="reserva?acao=editar&id=${r.id}" title="Editar" class="btn-icon btn-edit"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a href="reserva?acao=cancelar&id=${r.id}" title="Cancelar" class="btn-icon btn-delete" onclick="return confirm('Cancelar reserva?')"><i class="fa-solid fa-trash-can"></i></a>
+                                <a href="reserva?acao=cancelar&id=${r.id}" title="Cancelar" class="btn-icon btn-delete btn-confirm-delete" data-message="Tem certeza que deseja cancelar esta reserva?"><i class="fa-solid fa-trash-can"></i></a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -128,5 +151,31 @@
         </main>
     </div>
 </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.btn-confirm-delete').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('href');
+                    const message = this.getAttribute('data-message') || 'Tem certeza que deseja prosseguir?';
+                    
+                    Swal.fire({
+                        title: 'Confirmação',
+                        text: message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Sim, cancelar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

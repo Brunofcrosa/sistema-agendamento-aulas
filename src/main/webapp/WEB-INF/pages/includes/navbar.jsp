@@ -3,6 +3,7 @@
 <%@ page isELIgnored="false" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <nav class="navbar-custom ${empty sessionScope.usuario || navbarFull ? 'navbar-full' : ''}">
     <div class="navbar-custom__left"></div>

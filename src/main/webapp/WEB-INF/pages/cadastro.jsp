@@ -42,7 +42,16 @@
             <a class="back-link" href="${pageContext.request.contextPath}/login">Voltar ao Login</a>
             
             <c:if test="${not empty erro}">
-                <p class="erro"><c:out value="${erro}" /></p>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: '<c:out value="${erro}" />',
+                            icon: 'error',
+                            confirmButtonColor: '#007bff'
+                        });
+                    });
+                </script>
             </c:if>
         </div>
     </div>
