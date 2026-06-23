@@ -13,7 +13,7 @@
       <li class="menu-item ${pageName == 'home' ? 'menu-item-active' : ''}">
         <a class="menu-link" href="home">
           <i class="menu-link-icon fa-solid fa-house"></i>
-          <span class="menu-link-text">Página Inicial</span>
+          <span class="menu-link-text">PÃ¡gina Inicial</span>
         </a>
       </li>
 

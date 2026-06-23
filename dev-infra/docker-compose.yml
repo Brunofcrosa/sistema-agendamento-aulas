@@ -1,0 +1,25 @@
+name: sistema-agendamento-aulas
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sistema-agendamento-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sistema-agendamento-salas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../src/main/resources/db/migration/create_schema.sql:/docker-entrypoint-initdb.d/01-create-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sistema-agendamento-salas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+    name: sistema_agendamento_aulas_postgres_data

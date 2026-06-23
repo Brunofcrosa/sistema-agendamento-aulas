@@ -18,10 +18,10 @@
         <main class="main-content">
             <c:if test="${not empty erro}"><div class="msg erro">${erro}</div></c:if>
              <c:choose>
-                 <c:when test="${param.msg == 'salva'}"><div class="msg">Reserva cadastrada!</div></c:when>
-                 <c:when test="${param.msg == 'editada'}"><div class="msg">Reserva atualizada!</div></c:when>
-                 <c:when test="${param.msg == 'cancelada'}"><div class="msg">Reserva cancelada!</div></c:when>
-                 <c:when test="${param.msg == 'sucesso'}"><div class="msg">Agendado com sucesso!</div></c:when>
+                 <c:when test="${msg == 'salva'}"><div class="msg">Reserva cadastrada!</div></c:when>
+                 <c:when test="${msg == 'editada'}"><div class="msg">Reserva atualizada!</div></c:when>
+                 <c:when test="${msg == 'cancelada'}"><div class="msg">Reserva cancelada!</div></c:when>
+                 <c:when test="${msg == 'sucesso'}"><div class="msg">Agendado com sucesso!</div></c:when>
              </c:choose>
             <c:if test="${tela == 'novo'}">
             <section class="content-card">
@@ -55,7 +55,7 @@
                         <input type="date" name="dataReserva" value="${reserva.dataReserva}" required>
                     </div>
                     <div class="form-field">
-                        <label>Hora de Início</label>
+                        <label>Hora de InÃ­cio</label>
                         <input type="time" name="horaInicio" value="${reserva.horaInicio}" required>
                     </div>
                     <div class="form-field">
@@ -75,7 +75,7 @@
                     <a class="btn-primary-link" href="reserva?tela=novo">Nova reserva</a>
                 </div>
                 <table>
-                    <tr><th>ID</th><th>Sala</th><th>Professor</th><th>Disciplina</th><th>Data</th><th>Início</th><th>Fim</th><th>Ações</th></tr>
+                    <tr><th>ID</th><th>Sala</th><th>Professor</th><th>Disciplina</th><th>Data</th><th>InÃ­cio</th><th>Fim</th><th>AÃ§Ãµes</th></tr>
                     <c:set var="counter" value="1" />
                     <c:forEach var="r" items="${reservas}">
                         <c:if test="${r.status == 'ATIVA'}">

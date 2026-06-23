@@ -18,9 +18,9 @@
         <main class="main-content">
             <c:if test="${not empty erro}"><div class="msg erro">${erro}</div></c:if>
             <c:choose>
-                <c:when test="${param.msg == 'salvo'}"><div class="msg">Docente cadastrado!</div></c:when>
-                <c:when test="${param.msg == 'excluido'}"><div class="msg">Docente excluído!</div></c:when>
-                <c:when test="${param.msg == 'editado'}"><div class="msg">Docente atualizado!</div></c:when>
+                <c:when test="${msg == 'salvo'}"><div class="msg">Docente cadastrado!</div></c:when>
+                <c:when test="${msg == 'excluido'}"><div class="msg">Docente excluÃ­do!</div></c:when>
+                <c:when test="${msg == 'editado'}"><div class="msg">Docente atualizado!</div></c:when>
             </c:choose>
             <c:if test="${tela == 'novo'}">
             <section class="content-card">
@@ -28,7 +28,7 @@
                 <form action="docente" method="post" class="form-grid">
                     <input type="hidden" name="id" value="${docente.id}">
                     <div class="form-field">
-                        <label>Matrícula</label>
+                        <label>MatrÃ­cula</label>
                         <input type="text" name="matricula" value="${docente.matricula}" placeholder="Ex: 123456" required>
                     </div>
                     <div class="form-field">
@@ -48,7 +48,7 @@
                     <a class="btn-primary-link" href="docente?tela=novo">Cadastrar docente</a>
                 </div>
                 <table>
-                    <tr><th>ID</th><th>Nome do Docente</th><th>Matrícula</th><th>Ações</th></tr>
+                    <tr><th>ID</th><th>Nome do Docente</th><th>MatrÃ­cula</th><th>AÃ§Ãµes</th></tr>
                     <c:forEach var="d" items="${docentes}" varStatus="status">
                         <tr>
                             <td>${status.index + 1}</td>

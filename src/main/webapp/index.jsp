@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 <html>
@@ -20,6 +20,9 @@
             <button type="submit">Entrar</button>
         </form>
         <a href="cadastro">Criar conta</a>
+        <c:if test="${msg == 'cadastrado'}">
+            <p class="msg">Conta criada com sucesso!</p>
+        </c:if>
         <c:if test="${not empty erro}">
             <p class="erro">${erro}</p>
         </c:if>

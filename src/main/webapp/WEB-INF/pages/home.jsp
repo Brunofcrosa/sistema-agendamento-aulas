@@ -37,7 +37,7 @@
                         <i class="fa-solid fa-door-open"></i>
                         <span>
                             <strong>Gerenciar salas</strong>
-                            <p>Operações referentes ao gerenciamento de salas.</p>
+                            <p>OperaÃ§Ãµes referentes ao gerenciamento de salas.</p>
                         </span>
                         <b><i class="fa-solid fa-arrow-right"></i></b>
                     </a>
@@ -45,7 +45,7 @@
                         <i class="fa-solid fa-calendar-check"></i>
                         <span>
                             <strong>Alocamento de salas</strong>
-                            <p>Operações referentes ao alocamento de salas.</p>
+                            <p>OperaÃ§Ãµes referentes ao alocamento de salas.</p>
                         </span>
                         <b><i class="fa-solid fa-arrow-right"></i></b>
                     </a>
@@ -53,7 +53,7 @@
                         <i class="fa-solid fa-chalkboard-user"></i>
                         <span>
                             <strong>Gerenciar docentes</strong>
-                            <p>Operações referentes ao gerenciamento de docentes.</p>
+                            <p>OperaÃ§Ãµes referentes ao gerenciamento de docentes.</p>
                         </span>
                         <b><i class="fa-solid fa-arrow-right"></i></b>
                     </a>
