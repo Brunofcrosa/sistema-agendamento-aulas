@@ -172,8 +172,10 @@ public class SalaController {
         int targetDay = Calendar.MONDAY;
 
         String diaNorm = diaSemana.trim().toUpperCase()
-                .replace("Ã", "A").replace("Ã‰", "E").replace("Ã", "I")
-                .replace("Ã“", "O").replace("Ãš", "U").replace("Ã‡", "C");
+                .replace("Ã‡", "C")
+                .replace("Ç", "C")
+                .replace("Ã ", "A").replace("Ã‰", "E").replace("Ã ", "I")
+                .replace("Ã“", "O").replace("Ãš", "U");
 
         if (diaNorm.contains("SEGUNDA")) targetDay = Calendar.MONDAY;
         else if (diaNorm.contains("TERCA")) targetDay = Calendar.TUESDAY;

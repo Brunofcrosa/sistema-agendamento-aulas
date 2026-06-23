@@ -58,12 +58,12 @@
             <c:if test="${tela == 'novo'}">
             <section class="content-card">
                 <h2><c:out value="${reserva.id > 0 ? 'Editar Agendamento' : 'Novo Agendamento'}" /></h2>
-                <form action="reserva" method="post" class="form-grid">
+                <form action="reserva" method="post" class="form-grid" id="reservaForm">
                     <input type="hidden" name="csrfToken" value="${csrfToken}">
                     <input type="hidden" name="id" value="${reserva.id}">
                     
                     <div class="form-field">
-                        <label for="salaId">Sala</label>
+                        <label for="salaId">Sala <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <select id="salaId" name="salaId" required>
                             <option value="">Selecione uma sala</option>
                             <c:forEach var="s" items="${salas}">
@@ -75,7 +75,7 @@
                     </div>
                     
                     <div class="form-field">
-                        <label for="docenteId">Nome do Professor</label>
+                        <label for="docenteId">Nome do Professor <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <select id="docenteId" name="docenteId" required>
                             <option value="">Selecione um professor</option>
                             <c:forEach var="d" items="${docentes}">
@@ -87,22 +87,22 @@
                     </div>
                     
                     <div class="form-field">
-                        <label for="finalidade">Nome da Disciplina</label>
+                        <label for="finalidade">Nome da Disciplina <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="text" id="finalidade" name="finalidade" value="<c:out value='${reserva.finalidade}' />" placeholder="Nome da Disciplina" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="dataReserva">Data</label>
+                        <label for="dataReserva">Data <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="date" id="dataReserva" name="dataReserva" value="${reserva.dataReserva}" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="horaInicio">Hora de Início</label>
+                        <label for="horaInicio">Hora de Início <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="time" id="horaInicio" name="horaInicio" value="${reserva.horaInicio}" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="horaFim">Hora de Fim</label>
+                        <label for="horaFim">Hora de Fim <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="time" id="horaFim" name="horaFim" value="${reserva.horaFim}" required>
                     </div>
                     
@@ -153,6 +153,7 @@
 </div>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
+            // Confirmation dialogs
             document.querySelectorAll('.btn-confirm-delete').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -175,6 +176,25 @@
                     });
                 });
             });
+
+            // Reservation form validation
+            const reservaForm = document.getElementById('reservaForm');
+            if (reservaForm) {
+                reservaForm.addEventListener('submit', function(e) {
+                    const horaInicio = document.getElementById('horaInicio').value;
+                    const horaFim = document.getElementById('horaFim').value;
+                    
+                    if (horaInicio && horaFim && horaInicio >= horaFim) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Horário Inválido',
+                            text: 'A hora de fim deve ser posterior à hora de início.',
+                            icon: 'warning',
+                            confirmButtonColor: '#007bff'
+                        });
+                    }
+                });
+            }
         });
     </script>
 </body>

@@ -62,12 +62,12 @@
                     <input type="hidden" name="id" value="${sala.id}">
                     
                     <div class="form-field">
-                        <label for="nome">Número da Sala</label>
+                        <label for="nome">Número da Sala <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="text" id="nome" name="nome" value="<c:out value='${sala.nome}' />" placeholder="Ex: F209" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="capacidade">Capacidade Máxima</label>
+                        <label for="capacidade">Capacidade Máxima <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="number" id="capacidade" name="capacidade" value="${sala.capacidade}" min="1" placeholder="Ex: 40" required>
                     </div>
                     
@@ -131,7 +131,7 @@
             <c:if test="${tela == 'encontrar'}">
             <section class="content-card">
                 <h2>Encontrar Sala Disponível</h2>
-                <form action="${pageContext.request.contextPath}/sala" method="get" class="form-grid search-grid">
+                <form action="${pageContext.request.contextPath}/sala" method="get" class="form-grid search-grid" id="searchRoomForm">
                     <input type="hidden" name="tela" value="encontrar">
                     
                     <div class="form-field">
@@ -140,8 +140,9 @@
                     </div>
                     
                     <div class="form-field">
-                        <label for="searchDiaSemana">Dia da Semana</label>
-                        <select id="searchDiaSemana" name="diaSemana">
+                        <label for="searchDiaSemana">Dia da Semana <span style="color: #dc3545; font-weight: bold;">*</span></label>
+                        <select id="searchDiaSemana" name="diaSemana" required>
+                            <option value="" disabled ${empty param.diaSemana ? 'selected' : ''}>Selecione o dia</option>
                             <option value="SEGUNDA" ${param.diaSemana == 'SEGUNDA' ? 'selected' : ''}>SEGUNDA</option>
                             <option value="TERÇA" ${param.diaSemana == 'TERÇA' ? 'selected' : ''}>TERÇA</option>
                             <option value="QUARTA" ${param.diaSemana == 'QUARTA' ? 'selected' : ''}>QUARTA</option>
@@ -151,13 +152,13 @@
                     </div>
                     
                     <div class="form-field">
-                        <label for="searchHoraInicio">Hora de Início</label>
-                        <input type="time" id="searchHoraInicio" name="horaInicio" value="<c:out value='${param.horaInicio}' />">
+                        <label for="searchHoraInicio">Hora de Início <span style="color: #dc3545; font-weight: bold;">*</span></label>
+                        <input type="time" id="searchHoraInicio" name="horaInicio" value="<c:out value='${param.horaInicio}' />" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="searchHoraFim">Hora de Fim</label>
-                        <input type="time" id="searchHoraFim" name="horaFim" value="<c:out value='${param.horaFim}' />">
+                        <label for="searchHoraFim">Hora de Fim <span style="color: #dc3545; font-weight: bold;">*</span></label>
+                        <input type="time" id="searchHoraFim" name="horaFim" value="<c:out value='${param.horaFim}' />" required>
                     </div>
                     
                     <div class="form-field">
@@ -215,6 +216,7 @@
 </div>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
+            // Confirmation dialogs
             document.querySelectorAll('.btn-confirm-delete').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -237,6 +239,25 @@
                     });
                 });
             });
+
+            // Search form validation
+            const searchForm = document.getElementById('searchRoomForm');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    const horaInicio = document.getElementById('searchHoraInicio').value;
+                    const horaFim = document.getElementById('searchHoraFim').value;
+                    
+                    if (horaInicio && horaFim && horaInicio >= horaFim) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Horário Inválido',
+                            text: 'A hora de fim deve ser posterior à hora de início.',
+                            icon: 'warning',
+                            confirmButtonColor: '#007bff'
+                        });
+                    }
+                });
+            }
         });
     </script>
 </body>

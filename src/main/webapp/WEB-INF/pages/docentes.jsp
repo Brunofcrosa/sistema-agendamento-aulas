@@ -62,12 +62,12 @@
                     <input type="hidden" name="id" value="${docente.id}">
                     
                     <div class="form-field">
-                        <label for="matricula">Matrícula</label>
+                        <label for="matricula">Matrícula <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="text" id="matricula" name="matricula" value="<c:out value='${docente.matricula}' />" placeholder="Ex: 123456" required>
                     </div>
                     
                     <div class="form-field">
-                        <label for="nome">Nome do Docente</label>
+                        <label for="nome">Nome do Docente <span style="color: #dc3545; font-weight: bold;">*</span></label>
                         <input type="text" id="nome" name="nome" value="<c:out value='${docente.nome}' />" placeholder="Ex: Professor X" required>
                     </div>
                     
