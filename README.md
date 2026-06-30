@@ -1,81 +1,169 @@
-# Sistema de Agendamento de Salas
+# Sistema de Agendamento de Salas de Aula
 
-Objetivo desse projeto e resolver o problema dos professores que querem uma sala especifica e nem sempre sabem quais horarios estao disponiveis.
+## Descrição do sistema
 
-## O que o sistema faz
+O Sistema de Agendamento de Salas de Aula é uma aplicação web desenvolvida para auxiliar professores e usuários administrativos no controle de salas disponíveis para aulas. O sistema permite cadastrar salas, cadastrar docentes e realizar reservas, evitando conflitos de horários para a mesma sala.
 
-- autenticacao de usuarios com login por e-mail e senha.
-- criacao de conta para novos usuarios.
-- gerenciamento de docentes.
-- gerenciamento de salas.
-- reserva de salas de aula.
+A aplicação possui autenticação por login, controle de sessão e telas protegidas para usuários autenticados.
 
-## Tecnologias
+## Funcionalidades
 
-- Java com Spring MVC/Spring Boot
-- JSP
+- Login de usuários e controle de sessão.
+- Cadastro de novos usuários.
+- CRUD de salas.
+- CRUD de docentes.
+- CRUD de reservas.
+- Busca de salas disponíveis por dia, horário, capacidade e recurso.
+- Validação de formulários e regras de negócio.
+- Bloqueio de reserva em horários conflitantes.
+
+## Requisitos atendidos
+
+- Mínimo de 2 CRUDs: salas, docentes e reservas.
+- Tela de processamento: busca de salas disponíveis e processamento de reservas.
+- Controle de sessão do usuário.
+- Arquitetura MVC.
+- Uso de Spring MVC/Spring Boot.
+- Projeto estruturado com Maven.
+- Banco de dados com chaves estrangeiras.
+
+## Tecnologias utilizadas
+
+- Java 21
+- Spring Boot / Spring MVC
+- JSP e JSTL
+- Maven
 - PostgreSQL
+- Docker Compose
 
-- **controller:** organiza o fluxo das telas com controllers Spring MVC.
-- **service:** regras de negocio.
-- **dao:** comunicacao com o PostgreSQL.
-- **model:** classes do sistema.
-- **src/main/webapp:** paginas JSP, includes visuais e arquivos estaticos.
+## Arquitetura MVC
 
-O projeto usa `RedirectAttributes` para mensagens depois de redirects, seguindo o fluxo Post-Redirect-Get explicado nos slides de Spring MVC.
+- `controller`: controla as rotas e o fluxo entre telas.
+- `service`: concentra regras de negócio e validações.
+- `dao`: realiza a comunicação com o banco de dados.
+- `model`: representa as entidades do sistema.
+- `src/main/webapp`: contém as páginas JSP, CSS e imagens.
 
-## Fluxo principal da aplicacao
+## Diagrama ER
 
-- O usuario acessa a tela de login.
-- Depois de autenticado, entra no painel principal.
-- A partir dali, pode gerenciar docentes, salas e reservas.
-- Ao criar uma reserva, o sistema valida horarios e impede choque de agenda.
+```mermaid
+erDiagram
+    USUARIO {
+        int id PK
+        varchar nome
+        varchar email UK
+        varchar senha
+        boolean ativo
+    }
+
+    DOCENTE {
+        int id PK
+        varchar matricula UK
+        varchar nome
+    }
+
+    SALA {
+        int id PK
+        varchar nome
+        varchar bloco
+        int capacidade
+        varchar recursos
+        boolean ativa
+    }
+
+    RESERVA {
+        int id PK
+        int sala_id FK
+        int docente_id FK
+        date data_reserva
+        time hora_inicio
+        time hora_fim
+        varchar finalidade
+        varchar status
+    }
+
+    SALA ||--o{ RESERVA : possui
+    DOCENTE ||--o{ RESERVA : realiza
+```
 
 ## Banco de dados
 
-O schema atual possui quatro entidades principais:
+O banco possui quatro tabelas principais:
 
-- usuario
-- docente
-- sala
-- reserva
+- `usuario`
+- `docente`
+- `sala`
+- `reserva`
 
-O script de criacao esta em:
+A tabela `reserva` possui chaves estrangeiras para `sala` e `docente`, garantindo o relacionamento entre as reservas, as salas e os professores.
+
+Script de criação do banco:
 
 `src/main/resources/db/migration/create_schema.sql`
 
-Hoje a conexao com o banco esta configurada diretamente em codigo, em `src/main/java/dao/ConexaoDB.java`.
+Configuração usada pela aplicação:
 
-- **host:** localhost
-- **porta:** 5432
-- **banco:** sistema-agendamento-salas
-- **usuario:** postgres
-- **senha:** postgres
+- Host: `localhost`
+- Porta: `5432`
+- Banco: `sistema-agendamento-salas`
+- Usuário: `postgres`
+- Senha: `postgres`
 
-## Como rodar localmente
+Arquivo de conexão:
 
-### Pre-requisitos
+`src/main/java/org/agendamento/sistemaagendamentoaulas/dao/ConexaoDB.java`
 
-- Java 21 instalado ou configurado na IDE
-- PostgreSQL em execucao
+## Como instalar e executar
 
-### Passos
+### Pré-requisitos
 
-1. Crie o banco `sistema-agendamento-salas` no PostgreSQL.
-2. Execute o script `src/main/resources/db/migration/create_schema.sql`.
-3. Verifique a conexao em `src/main/java/dao/ConexaoDB.java`.
-4. Rode a aplicacao com Spring Boot:
+- Java 21 configurado no IntelliJ IDEA.
+- Docker e Docker Compose instalados.
+- Maven Wrapper do projeto, já incluído nos arquivos `mvnw` e `mvnw.cmd`.
+
+### Subir o banco com Docker
+
+A partir da pasta `dev-infra`, execute:
 
 ```bash
-./mvnw spring-boot:run
+docker compose up
 ```
 
-No Windows:
+O Docker Compose cria o banco PostgreSQL e executa automaticamente o script:
+
+`src/main/resources/db/migration/create_schema.sql`
+
+### Executar a aplicação
+
+No IntelliJ IDEA, execute a classe principal:
+
+`src/main/java/org/agendamento/sistemaagendamentoaulas/SistemaAgendamentoAulasApplication.java`
+
+Também é possível executar pelo terminal:
 
 ```bash
 mvnw.cmd spring-boot:run
 ```
 
-5. Acesse `http://localhost:9090`.
+No Linux ou macOS:
 
-O projeto nao depende mais do WildFly para rodar em desenvolvimento; o Spring Boot sobe a aplicacao com Tomcat.
+```bash
+./mvnw spring-boot:run
+```
+
+Após iniciar a aplicação, acesse:
+
+`http://localhost:9090`
+
+## Como utilizar
+
+1. Acesse a tela inicial do sistema.
+2. Crie uma conta ou faça login com um usuário já cadastrado.
+3. Cadastre docentes.
+4. Cadastre salas com bloco, capacidade e recursos.
+5. Acesse a área de reservas para criar, editar ou cancelar uma reserva.
+6. Use a busca de salas para encontrar salas disponíveis por dia, horário, capacidade e recursos.
+
+## Observações
+
+O sistema valida campos obrigatórios nos formulários e também aplica validações no backend. Ao cadastrar ou editar uma reserva, o sistema impede que a mesma sala seja reservada em horários conflitantes.
