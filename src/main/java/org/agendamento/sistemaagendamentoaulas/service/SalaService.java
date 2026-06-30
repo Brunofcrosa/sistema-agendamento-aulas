@@ -24,17 +24,17 @@ public class SalaService {
 
     public void excluir(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Sala invÃ¡lida para exclusÃ£o");
+            throw new IllegalArgumentException("Sala inválida para exclusão");
         }
         boolean excluiu = new SalaDAO().excluir(id);
         if (!excluiu) {
-            throw new IllegalArgumentException("Nao e possivel excluir uma sala com reservas ativas.");
+            throw new IllegalArgumentException("Não é possível excluir uma sala com reservas ativas.");
         }
     }
 
     public void atualizar(Sala sala) {
         if (sala.getId() <= 0) {
-            throw new IllegalArgumentException("Sala invÃ¡lida para atualizaÃ§Ã£o");
+            throw new IllegalArgumentException("Sala inválida para atualização");
         }
         validarSala(sala);
         new SalaDAO().atualizar(sala);
@@ -42,17 +42,17 @@ public class SalaService {
 
     public Sala buscarPorId(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Sala invÃ¡lida para busca");
+            throw new IllegalArgumentException("Sala inválida para busca");
         }
         return new SalaDAO().buscarPorId(id);
     }
 
     private void validarSala(Sala sala) {
         if (sala.getNome() == null || sala.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome da sala Ã© obrigatÃ³rio");
+            throw new IllegalArgumentException("Nome da sala é obrigatório");
         }
         if (sala.getBloco() == null || sala.getBloco().trim().isEmpty()) {
-            throw new IllegalArgumentException("Bloco da sala Ã© obrigatÃ³rio");
+            throw new IllegalArgumentException("Bloco da sala é obrigatório");
         }
         if (sala.getCapacidade() <= 0) {
             throw new IllegalArgumentException("Capacidade deve ser maior que zero");

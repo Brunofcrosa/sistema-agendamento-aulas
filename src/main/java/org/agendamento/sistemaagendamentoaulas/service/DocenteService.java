@@ -24,17 +24,17 @@ public class DocenteService {
 
     public void excluir(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Docente invÃ¡lido para exclusÃ£o");
+            throw new IllegalArgumentException("Docente inválido para exclusão");
         }
         boolean excluiu = new DocenteDAO().excluir(id);
         if (!excluiu) {
-            throw new IllegalArgumentException("Nao e possivel excluir um docente com reservas ativas.");
+            throw new IllegalArgumentException("Não é possível excluir um docente com reservas ativas.");
         }
     }
 
     public void atualizar(Docente docente) {
         if (docente.getId() <= 0) {
-            throw new IllegalArgumentException("Docente invÃ¡lido para atualizaÃ§Ã£o");
+            throw new IllegalArgumentException("Docente inválido para atualização");
         }
         validarDocente(docente);
         new DocenteDAO().atualizar(docente);
@@ -42,17 +42,17 @@ public class DocenteService {
 
     public Docente buscarPorId(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Docente invÃ¡lido para busca");
+            throw new IllegalArgumentException("Docente inválido para busca");
         }
         return new DocenteDAO().buscarPorId(id);
     }
 
     private void validarDocente(Docente docente) {
         if (docente.getNome() == null || docente.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do docente Ã© obrigatÃ³rio");
+            throw new IllegalArgumentException("Nome do docente é obrigatório");
         }
         if (docente.getMatricula() == null || docente.getMatricula().trim().isEmpty()) {
-            throw new IllegalArgumentException("MatrÃ­cula do docente Ã© obrigatÃ³ria");
+            throw new IllegalArgumentException("Matrícula do docente é obrigatória");
         }
     }
 }
