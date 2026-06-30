@@ -26,7 +26,10 @@ public class SalaService {
         if (id <= 0) {
             throw new IllegalArgumentException("Sala invÃ¡lida para exclusÃ£o");
         }
-        new SalaDAO().excluir(id);
+        boolean excluiu = new SalaDAO().excluir(id);
+        if (!excluiu) {
+            throw new IllegalArgumentException("Nao e possivel excluir uma sala com reservas ativas.");
+        }
     }
 
     public void atualizar(Sala sala) {

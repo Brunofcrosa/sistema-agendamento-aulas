@@ -194,7 +194,7 @@
                                 <td><c:out value="${s.recursos == 'Projetor' ? 'Sim' : 'Não'}" /></td>
                                 <td>Ativa</td>
                                 <td class="actions">
-                                    <a class="table-button" href="${pageContext.request.contextPath}/sala?acao=reservarRapido&salaId=${s.id}&diaSemana=<c:out value='${param.diaSemana}'/>&horaInicio=<c:out value='${param.horaInicio}'/>&horaFim=<c:out value='${param.horaFim}'/>&capacidade=<c:out value='${param.capacidade}'/>&possuiProjetor=<c:out value='${param.possuiProjetor}'/>">
+                                    <a class="table-button" href="${pageContext.request.contextPath}/reserva?tela=novo&salaId=${s.id}&diaSemana=<c:out value='${param.diaSemana}'/>&horaInicio=<c:out value='${param.horaInicio}'/>&horaFim=<c:out value='${param.horaFim}'/>">
                                         Reservar
                                     </a>
                                 </td>

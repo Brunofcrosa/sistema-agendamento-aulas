@@ -15,6 +15,7 @@ import org.agendamento.sistemaagendamentoaulas.service.SalaService;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -36,6 +37,7 @@ public class ReservaController {
                          @RequestParam(required = false) String tela,
                          @RequestParam(required = false) Integer id,
                          @RequestParam(required = false) Integer salaId,
+                         @RequestParam(required = false) String diaSemana,
                          @RequestParam(required = false) String horaInicio,
                          @RequestParam(required = false) String horaFim,
                          HttpSession session,
@@ -53,7 +55,7 @@ public class ReservaController {
             }
 
             if ("novo".equals(tela) && !model.containsAttribute("reserva")) {
-                Reserva reserva = montarReservaPreenchida(salaId, horaInicio, horaFim);
+                Reserva reserva = montarReservaPreenchida(salaId, diaSemana, horaInicio, horaFim);
                 model.addAttribute("reserva", reserva);
             }
 
@@ -137,11 +139,14 @@ public class ReservaController {
         return Time.valueOf(horario);
     }
 
-    private Reserva montarReservaPreenchida(Integer salaId, String horaInicio, String horaFim) {
+    private Reserva montarReservaPreenchida(Integer salaId, String diaSemana, String horaInicio, String horaFim) {
         Reserva reserva = new Reserva();
 
         if (salaId != null) {
             reserva.setSalaId(salaId);
+        }
+        if (diaSemana != null && !diaSemana.isEmpty()) {
+            reserva.setDataReserva(calcularProximaData(diaSemana));
         }
         if (horaInicio != null && !horaInicio.isEmpty()) {
             reserva.setHoraInicio(converterHorario(horaInicio));
@@ -151,5 +156,30 @@ public class ReservaController {
         }
 
         return reserva;
+    }
+
+    private Date calcularProximaData(String diaSemana) {
+        Calendar cal = Calendar.getInstance();
+        int targetDay = Calendar.MONDAY;
+
+        String diaNorm = diaSemana.trim().toUpperCase()
+                .replace("Ãƒâ€¡", "C")
+                .replace("Ã‡", "C")
+                .replace("Ç", "C")
+                .replace("Ãƒ ", "A").replace("Ãƒâ€°", "E").replace("Ãƒ ", "I")
+                .replace("Ãƒâ€œ", "O").replace("ÃƒÅ¡", "U");
+
+        if (diaNorm.contains("SEGUNDA")) targetDay = Calendar.MONDAY;
+        else if (diaNorm.contains("TERCA")) targetDay = Calendar.TUESDAY;
+        else if (diaNorm.contains("TERÇA")) targetDay = Calendar.TUESDAY;
+        else if (diaNorm.contains("QUARTA")) targetDay = Calendar.WEDNESDAY;
+        else if (diaNorm.contains("QUINTA")) targetDay = Calendar.THURSDAY;
+        else if (diaNorm.contains("SEXTA")) targetDay = Calendar.FRIDAY;
+
+        int currentDay = cal.get(Calendar.DAY_OF_WEEK);
+        int daysToAdd = (targetDay - currentDay + 7) % 7;
+
+        cal.add(Calendar.DAY_OF_YEAR, daysToAdd);
+        return new Date(cal.getTimeInMillis());
     }
 }

@@ -2,8 +2,6 @@ package org.agendamento.sistemaagendamentoaulas.controller;
 
 import org.agendamento.sistemaagendamentoaulas.dao.ReservaDAO;
 import jakarta.servlet.http.HttpSession;
-import org.agendamento.sistemaagendamentoaulas.model.Docente;
-import org.agendamento.sistemaagendamentoaulas.model.Reserva;
 import org.agendamento.sistemaagendamentoaulas.model.Sala;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.agendamento.sistemaagendamentoaulas.service.DocenteService;
-import org.agendamento.sistemaagendamentoaulas.service.ReservaService;
 import org.agendamento.sistemaagendamentoaulas.service.SalaService;
 
 import java.sql.Date;
@@ -61,22 +57,6 @@ public class SalaController {
                 service.excluir(id);
                 redirectAttrs.addFlashAttribute("msg", "excluido");
                 return "redirect:/sala?tela=listar";
-            }
-
-            if ("reservarRapido".equals(acao) && salaId != null) {
-                Date dataReserva = calcularProximaData(diaSemana);
-                Time inicio = converterHorario(horaInicio);
-                Time fim = converterHorario(horaFim);
-
-                List<Docente> docentes = new DocenteService().listarAtivos();
-                if (docentes.isEmpty()) {
-                    throw new IllegalArgumentException("Nenhum docente ativo cadastrado. Cadastre um docente antes de fazer reservas.");
-                }
-
-                Reserva reserva = new Reserva(salaId, docentes.get(0).getId(), dataReserva, inicio, fim, "Agendamento Rapido", "ATIVA");
-                new ReservaService().inserir(reserva);
-                redirectAttrs.addFlashAttribute("msg", "sucesso");
-                return "redirect:/reserva";
             }
         } catch (IllegalArgumentException e) {
             model.addAttribute("erro", e.getMessage());
