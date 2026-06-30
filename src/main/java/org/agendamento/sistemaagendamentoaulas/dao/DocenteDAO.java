@@ -99,14 +99,32 @@ public class DocenteDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM docente WHERE id = ?";
+        String removerReservasCanceladas = "DELETE FROM reserva WHERE docente_id = ? AND status <> 'ATIVA'";
+        String removerDocente = "DELETE FROM docente "
+                + "WHERE id = ? "
+                + "AND NOT EXISTS (SELECT 1 FROM reserva WHERE docente_id = ? AND status = 'ATIVA')";
 
-        try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoDB.getConexao()) {
+            conn.setAutoCommit(false);
 
-            stmt.setInt(1, id);
+            try (PreparedStatement stmtReservas = conn.prepareStatement(removerReservasCanceladas);
+                 PreparedStatement stmtDocente = conn.prepareStatement(removerDocente)) {
 
-            return stmt.executeUpdate() > 0;
+                stmtReservas.setInt(1, id);
+                stmtReservas.executeUpdate();
+
+                stmtDocente.setInt(1, id);
+                stmtDocente.setInt(2, id);
+
+                boolean excluiu = stmtDocente.executeUpdate() > 0;
+                conn.commit();
+                return excluiu;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao excluir docente", e);

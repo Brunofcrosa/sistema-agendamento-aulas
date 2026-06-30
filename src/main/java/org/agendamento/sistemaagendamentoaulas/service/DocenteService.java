@@ -26,7 +26,10 @@ public class DocenteService {
         if (id <= 0) {
             throw new IllegalArgumentException("Docente invÃ¡lido para exclusÃ£o");
         }
-        new DocenteDAO().excluir(id);
+        boolean excluiu = new DocenteDAO().excluir(id);
+        if (!excluiu) {
+            throw new IllegalArgumentException("Nao e possivel excluir um docente com reservas ativas.");
+        }
     }
 
     public void atualizar(Docente docente) {
